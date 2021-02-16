@@ -1,0 +1,24 @@
+{
+  "name": "adventure-cli",
+  "version": "0.0.0",
+  "description": "Adventure game commandline interface",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/umbrellacorp-org/adventure-cli.git"
+  },
+  "keywords": [
+    "node",
+    "cli",
+    "game"
+  ],
+  "author": "Lars Krieger <lars.krieger@gmail.com>",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/umbrellacorp-org/adventure-cli/issues"
+  },
+  "homepage": "https://github.com/umbrellacorp-org/adventure-cli#readme"
+}
