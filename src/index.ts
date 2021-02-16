@@ -1,1 +1,3 @@
-console.log("Run program")
+import store from "./redux";
+
+console.log("Run program", store.getState())
