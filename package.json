@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "description": "Adventure game commandline interface",
   "main": "src/index.ts",
+  "typings": "./index.d.ts",
   "scripts": {
-    "start": "NODE_PATH=./ nodemon",
+    "start": "NODE_PATH=./ nodemon --no-stdin",
     "test": "test",
     "clean": "rimraf -rf bin",
     "compile": "tsc",
