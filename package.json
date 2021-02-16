@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/umbrellacorp-org/adventure-cli/issues"
   },
-  "homepage": "https://github.com/umbrellacorp-org/adventure-cli#readme"
+  "homepage": "https://github.com/umbrellacorp-org/adventure-cli#readme",
+  "devDependencies": {
+    "typescript": "^4.1.5"
+  }
 }
