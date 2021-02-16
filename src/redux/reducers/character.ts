@@ -8,12 +8,13 @@ export enum CharacterClass {
   PRIEST = "Priest",
 }
 
-type Character = {
+export type Character = {
   name: string;
   class: CharacterClass;
   level: number;
   experience: number;
 }
+
 
 export const setCharacter = createAction<Character>("decreaseHealth")
 
