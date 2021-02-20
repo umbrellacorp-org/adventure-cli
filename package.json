@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "typings": "./index.d.ts",
   "scripts": {
-    "start": "NODE_PATH=./ nodemon --no-stdin",
+    "start": "ts-node src/index.ts",
     "test": "test",
     "clean": "rimraf -rf bin",
     "compile": "tsc",
