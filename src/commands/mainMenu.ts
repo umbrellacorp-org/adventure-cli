@@ -1,6 +1,8 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
+import { Character } from "src/models/character";
 import { dialog, DialogTemper } from "../utils";
+import { createCharacter } from "./character";
 
 enum MainMenuAnswer {
   SELECT_CHARACTER="Select Character",
@@ -12,7 +14,7 @@ type MainMenu = {
   selection: MainMenuAnswer
 }
 
-export const mainMenu = async (): Promise<void> => {
+export const mainMenu = async (callback: (char: Character) => void): Promise<void> => {
   const prompt = inquirer.createPromptModule();
   const choices = [MainMenuAnswer.SELECT_CHARACTER, MainMenuAnswer.CREATE_CHARACTER, new inquirer.Separator(), MainMenuAnswer.EXIT];
   try {
@@ -21,7 +23,10 @@ export const mainMenu = async (): Promise<void> => {
     ])
 
     if (selection === MainMenuAnswer.SELECT_CHARACTER) console.log("selectChar");
-    if (selection === MainMenuAnswer.CREATE_CHARACTER) console.log("createChar");
+    if (selection === MainMenuAnswer.CREATE_CHARACTER) {
+      const character: Character = await createCharacter();
+      callback(character);
+    }
     if (selection === MainMenuAnswer.EXIT) {
       dialog("Innkeeper", "Welcome back to the Inn adventure.", DialogTemper.HAPPY)
       dialog("Innkeeper", "I've prepared your usual room for a nice rest.", DialogTemper.HAPPY)

@@ -1,5 +1,5 @@
-import inquirer, { QuestionCollection } from "inquirer"
-import { Character } from "src/redux/reducers/character";
+import inquirer, { QuestionCollection } from "inquirer";
+import { Character } from "src/models/character";
 import { validateCharacterName } from "./validation"
 /**
  * selectCharacter
@@ -39,5 +39,7 @@ export const createCharacter = async (): Promise<Character> => {
     { name: "name", message: "Hello adventure, what may I call you?", type: "input", validate: validateCharacterName }
   ])
 
-  return {} as Character;
+  
+
+  return { name } as Character;
 }

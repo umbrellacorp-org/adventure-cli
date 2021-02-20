@@ -2,7 +2,7 @@ import fs from "fs";
 import util from "util";
 import path from "path";
 import inquirer, { QuestionCollection } from "inquirer";
-import { Character } from "src/redux/reducers/character";
+import { Character } from "src/models/character";
 
 const readFile = util.promisify(fs.readFile);
 
