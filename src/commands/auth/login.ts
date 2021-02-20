@@ -11,10 +11,11 @@ const loginQuestions: QuestionCollection = [
   { name: "password", message: "Enter your password", type: "password" },
 ]
 
-const loginPrompt = inquirer.createPromptModule();
+
+const prompt = inquirer.createPromptModule();
 
 export const login = async (): Promise<Character[]> => {
-  const answers = await loginPrompt(loginQuestions);
+  const answers = await prompt(loginQuestions);
 
   try {
     // authenticate login answers

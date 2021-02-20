@@ -1,6 +1,6 @@
-import inquirer, { QuestionCollection } from "inquirer";
+import inquirer, { QuestionCollection } from "inquirer"
 import { Character } from "src/redux/reducers/character";
-
+import { validateCharacterName } from "./validation"
 /**
  * selectCharacter
  * @description prompts the user to select their playable character form a simple list menu.
@@ -17,7 +17,7 @@ export const selectCharacter = async (characterList: Character[]): Promise<Chara
     const { selection } = await inquirer.prompt(questions)
     const selectedChar: Character | undefined = characterList.find(c => c.name === selection)
     if (!selectedChar) {
-      throw new Error ("Could not find character with name: ${selection}")
+      throw new Error (`Could not find character with name: ${selection}`)
     }
 
     return selectedChar;
@@ -27,4 +27,17 @@ export const selectCharacter = async (characterList: Character[]): Promise<Chara
   }
 
   return undefined;
+}
+
+/**
+ * createCharacter
+ * @description creates a new character, saves this base character and returns it to the program.
+ * @returns Character
+ */
+export const createCharacter = async (): Promise<Character> => {
+  const { name } = await inquirer.prompt<{ name: string }>([
+    { name: "name", message: "Hello adventure, what may I call you?", type: "input", validate: validateCharacterName }
+  ])
+
+  return {} as Character;
 }

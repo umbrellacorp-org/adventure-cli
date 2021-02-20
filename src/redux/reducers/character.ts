@@ -13,6 +13,7 @@ export type Character = {
   class: CharacterClass;
   level: number;
   experience: number;
+  nextLevelExperience: number;
 }
 
 
