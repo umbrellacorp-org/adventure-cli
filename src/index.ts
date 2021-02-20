@@ -1,54 +1,45 @@
-import inquirer, { QuestionCollection } from "inquirer";
 import store from "./redux";
-import { Character, CharacterClass, setCharacter } from "./redux/reducers/character";
+
+import { login } from "./commands/auth";
+import { Character, setCharacter } from "./redux/reducers/character";
+import { selectCharacter } from "./commands/character";
 
 const initialState = store.getState();
-const loginPrompt = inquirer.createPromptModule()
 
-const login = async (questions: QuestionCollection): Promise<Character> => {
-  const answers = await loginPrompt(questions);
-
-  try {
-    // authenticate login answers
-    if (answers.password !== "asdasd123") {
-      throw new Error("LOL")
-    }
-  } catch (err) {
-    console.error("failed to authenticate you, please try again.")
-    return login(questions);
-  }
-
-  const MOCK_CHARACTER: Character = {
-      class: CharacterClass.WARRIOR,
-      name: "Nopzen",
-      experience: 100,
-      level: 10
-    }
-
-  return MOCK_CHARACTER
-}
-
-const renderScreen = () => {
-  const state = store.getState();
-  console.log(state.character);
+const renderGame = async (character: Character) => {
+  console.log("Welcome to kashan:", character.name);
 }
 
 const run = async (): Promise<void> => {
   if (!initialState.character) {
-    const questions: QuestionCollection = [
-      { name: "username", message: "Enter your username", type: "string" },
-      { name: "password", message: "Enter your password", type: "password" },
-    ]
-
     try {
-      const result: Character = await login(questions);
-      store.dispatch(setCharacter(result))
-      renderScreen()
+      const characterList = await login();
+      let character: Character;
+
+      if (!characterList.length) {
+        // Create a new Character and then render game with that.
+        console.log("Create character prompt");
+        character = { name: "New char" } as Character
+        store.dispatch(setCharacter(character));
+        renderGame(character);
+        return;
+      }
+
+      const selectedChar = await selectCharacter(characterList);
+      if (!selectedChar) {
+        throw new Error("failed to complete character selection")
+      }
+
+      store.dispatch(setCharacter(selectedChar))
+      renderGame(selectedChar);
     } catch (err) {
-      throw new Error(err)
+      console.log("An unexpected error ocurred, developer have been notified, terminating.")
+      console.error(err)
+      process.exit(0);
     }
   } else {
-    console.log("render screen")
+    console.log("render game, initial state was provided")
+    renderGame(initialState.character)
   }
 }
 run();
