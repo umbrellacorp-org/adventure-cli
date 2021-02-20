@@ -29,5 +29,5 @@ export const dialog = (
       break;
   }
   const messenger = chalk[backgroundColor].white.bold(` ${characterName} `);
-  console.log(messenger, message);
+  console.log("\n", messenger, message, "\n");
 }
