@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
-import { Character } from "src/models/character";
-import { dialog, DialogTemper } from "../utils";
+import { Character } from "../models/character";
+import { dialog, DialogTemper, NpcNames } from "../utils";
 import { createCharacter } from "./character";
 
 enum MainMenuAnswer {
@@ -24,12 +24,12 @@ export const mainMenu = async (callback: (char: Character) => void): Promise<voi
 
     if (selection === MainMenuAnswer.SELECT_CHARACTER) console.log("selectChar");
     if (selection === MainMenuAnswer.CREATE_CHARACTER) {
-      const character: Character = await createCharacter();
+      const character = await createCharacter();
       callback(character);
     }
     if (selection === MainMenuAnswer.EXIT) {
-      dialog("Innkeeper", "Welcome back to the Inn adventure.", DialogTemper.HAPPY)
-      dialog("Innkeeper", "I've prepared your usual room for a nice rest.", DialogTemper.HAPPY)
+      dialog(NpcNames.INNKEEPER, "Welcome back to the Inn adventure.", DialogTemper.HAPPY)
+      dialog(NpcNames.INNKEEPER, "I've prepared your usual room for a nice rest.", DialogTemper.HAPPY)
       console.log(chalk.italic("You get up the stairs tired & slowly."));
       console.log(chalk.italic(`${chalk.bold("*boink*")}, you slam in the bed and fell deeply asleep`));
       console.log(chalk.italic("...zZzZz"));

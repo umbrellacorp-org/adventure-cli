@@ -2,7 +2,7 @@ import fs from "fs";
 import util from "util";
 import path from "path";
 import inquirer, { QuestionCollection } from "inquirer";
-import { Character } from "src/models/character";
+import { CharacterObj } from "src/models/character";
 
 const readFile = util.promisify(fs.readFile);
 
@@ -14,7 +14,7 @@ const loginQuestions: QuestionCollection = [
 
 const prompt = inquirer.createPromptModule();
 
-export const login = async (): Promise<Character[]> => {
+export const login = async (): Promise<CharacterObj[]> => {
   const answers = await prompt(loginQuestions);
 
   try {
@@ -27,10 +27,10 @@ export const login = async (): Promise<Character[]> => {
     return login();
   }
 
-  const characters: Character[] = [];
+  const characters: CharacterObj[] = [];
   try {
     const data: string = await readFile(path.join(__dirname, "../data/characters.json"), { encoding: "utf8" });
-    const playerCharacters: Character[] = JSON.parse(data).characters;
+    const playerCharacters: CharacterObj[] = JSON.parse(data).characters;
 
     playerCharacters.forEach(c => characters.push(c))
   } catch (err) {

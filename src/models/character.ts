@@ -1,3 +1,5 @@
+import { levelTable } from "../data/level";
+
 export enum CharacterClass {
   ROGUE = "Rogue",
   WARRIOR = "Warrior",
@@ -12,13 +14,12 @@ export type CharacterStats = {
   dexterity: number;
 }
 
-export type Character = {
+export type CharacterObj = {
   name: string;
   class: CharacterClass;
   level: number;
   stats: CharacterStats;
   experience: number;
-  nextLevelExperience: number
 }
 
 export const classColorScheme = {
@@ -42,4 +43,22 @@ export const classColorScheme = {
     hex: "#ece83d",
     text: "#ece83d"
   },
+}
+
+export class Character {
+  name: string;
+  class: CharacterClass;
+  level: number;
+  stats: CharacterStats;
+  experience: number;
+  nextLevelExperience: number
+
+  constructor(character: CharacterObj) {
+    this.name = character.name
+    this.class = character.class
+    this.level = character.level
+    this.stats = character.stats
+    this.experience = character.experience
+    this.nextLevelExperience = levelTable[character.level];
+  }
 }

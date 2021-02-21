@@ -1,3 +1,4 @@
 export enum NpcNames {
-  STORYTELLER = "Storyteller"
+  STORYTELLER = "Storyteller",
+  INNKEEPER = "Innkeeper",
 }

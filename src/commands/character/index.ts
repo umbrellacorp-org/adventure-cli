@@ -1,7 +1,8 @@
+import path from "path";
 import chalk from "chalk";
 import inquirer, { QuestionCollection } from "inquirer";
 import { dialog, DialogTemper, readFile, NpcNames } from "../../utils";
-import { Character, CharacterClass, CharacterStats, classColorScheme } from "../../models/character";
+import { CharacterObj, CharacterClass, classColorScheme, Character } from "../../models/character";
 import { validateCharacterName } from "./validation"
 
 /**
@@ -10,7 +11,7 @@ import { validateCharacterName } from "./validation"
  * @param characterList a list of characters to chose from.
  * @returns Character
  */
-export const selectCharacter = async (characterList: Character[]): Promise<Character|undefined> => {
+export const selectCharacter = async (characterList: CharacterObj[]): Promise<CharacterObj|undefined> => {
   const choices = characterList.map(c => c.name);
   const questions: QuestionCollection<{ selection: string }> = [{
     name: "selection", message: "Select your character", type: "list", choices
@@ -18,7 +19,7 @@ export const selectCharacter = async (characterList: Character[]): Promise<Chara
 
   try {
     const { selection } = await inquirer.prompt(questions)
-    const selectedChar: Character | undefined = characterList.find(c => c.name === selection)
+    const selectedChar: CharacterObj | undefined = characterList.find(c => c.name === selection)
     if (!selectedChar) {
       throw new Error (`Could not find character with name: ${selection}`)
     }
@@ -53,7 +54,7 @@ export const createCharacter = async (): Promise<Character> => {
   `, DialogTemper.HAPPY);
 
 
-  const character: Character = {
+  const character: CharacterObj = {
     name,
     class: classSelection,
     stats: {
@@ -62,11 +63,10 @@ export const createCharacter = async (): Promise<Character> => {
       dexterity: 10
     },
     level: 1,
-    experience: 0,
-    nextLevelExperience: 100,
+    experience: 0
   }
 
-  return character
+  return new Character(character);
 }
 
 /**
@@ -77,12 +77,22 @@ export const findCharacterByName = async (name: string): Promise<Character|undef
   let storedCharacters: string;
   
   try {
-    storedCharacters = await readFile(`${__dirname}/../../data/characters.json`, "utf-8");
+    storedCharacters = await readFile(path.join(__dirname, "../../data/characters.json"), "utf-8");
   } catch (error) {
     console.error("failed to retrieve character list")
     return undefined;
   }
 
-  const characterList: Character[] = JSON.parse(storedCharacters).characters;
-  return characterList.find(c => c.name.toLowerCase().trim() === name.toLowerCase().trim())
+  const characterList: CharacterObj[] = JSON.parse(storedCharacters).characters;
+  if (!characterList) {
+    return undefined;
+  }
+
+  const characterData = characterList.find(c => c.name.toLowerCase().trim() === name.toLowerCase().trim())
+
+  if (!characterData) {
+    return undefined;
+  }
+
+  return new Character(characterData);
 }
