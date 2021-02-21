@@ -11,26 +11,29 @@ import { validateCharacterName } from "./validation"
  * @param characterList a list of characters to chose from.
  * @returns Character
  */
-export const selectCharacter = async (characterList: CharacterObj[]): Promise<CharacterObj|undefined> => {
+export const selectCharacter = async (): Promise<Character> => {
+  const characterList =  await getStoredCharacters();
+
   const choices = characterList.map(c => c.name);
   const questions: QuestionCollection<{ selection: string }> = [{
     name: "selection", message: "Select your character", type: "list", choices
   }];
 
-  try {
-    const { selection } = await inquirer.prompt(questions)
-    const selectedChar: CharacterObj | undefined = characterList.find(c => c.name === selection)
-    if (!selectedChar) {
-      throw new Error (`Could not find character with name: ${selection}`)
-    }
-
-    return selectedChar;
-  } catch(err) {
-    console.error("Failed to complete selection, please try again.");
-    selectCharacter(characterList);
+  const { selection } = await inquirer.prompt(questions)
+  const selectedChar: CharacterObj | undefined = characterList.find(c => c.name === selection)
+  if (!selectedChar) {
+    console.error(`Could not find character with name: ${selection}`)
+    return selectCharacter();
   }
 
-  return undefined;
+  dialog(NpcNames.INNKEEPER, `
+    Welcome back adventure ${selectedChar.name}, happy to see you awake again!
+  `, DialogTemper.HAPPY)
+  dialog(selectedChar.name, `
+    ${chalk.bold.italic(`*hmpf*.... morning ${NpcNames.INNKEEPER}`)}
+  `, DialogTemper.NEUTRAL)
+  console.log(chalk.italic("You take a chair, and your day is about to begin..."))
+  return new Character(selectedChar);
 }
 
 /**
@@ -95,4 +98,26 @@ export const findCharacterByName = async (name: string): Promise<Character|undef
   }
 
   return new Character(characterData);
+}
+
+const getStoredCharacters = async (): Promise<CharacterObj[]> => {
+  let storedCharacters: string;
+
+  try {
+    storedCharacters = await readFile(path.join(__dirname, "../../data/characters.json"), "utf-8");
+  } catch (err) {
+    console.error("failed to find stored characters, terminating");
+    process.exit(0);
+  }
+
+  let characterList: CharacterObj[];
+
+  try {
+    characterList = JSON.parse(storedCharacters).characters;
+  } catch (err) {
+    console.error("failed to create character list");
+    process.exit(0);
+  }
+
+  return characterList;
 }

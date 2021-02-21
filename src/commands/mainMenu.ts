@@ -2,7 +2,7 @@ import chalk from "chalk";
 import inquirer from "inquirer";
 import { Character } from "../models/character";
 import { dialog, DialogTemper, NpcNames } from "../utils";
-import { createCharacter } from "./character";
+import { createCharacter, selectCharacter } from "./character";
 
 enum MainMenuAnswer {
   SELECT_CHARACTER="Select Character",
@@ -22,7 +22,10 @@ export const mainMenu = async (callback: (char: Character) => void): Promise<voi
       { name: "selection", message: "Welcome adventure, What would you like to do?", type: "list", choices }
     ])
 
-    if (selection === MainMenuAnswer.SELECT_CHARACTER) console.log("selectChar");
+    if (selection === MainMenuAnswer.SELECT_CHARACTER) {
+      const character = await selectCharacter();
+      callback(character);
+    }
     if (selection === MainMenuAnswer.CREATE_CHARACTER) {
       const character = await createCharacter();
       callback(character);
