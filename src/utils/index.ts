@@ -1,33 +1,9 @@
-import chalk from "chalk";
+import util from "util";
+import fs from "fs";
 
-export enum DialogTemper {
-  HAPPY="happy",
-  NEUTRAL="neutral",
-  ANNOYED="annoyed",
-  ANGRY="angry"
-}
+export { NpcNames } from "./npcs";
+export { dialog, DialogTemper } from "./dialog";
 
-export const dialog = (
-  characterName: string, 
-  message: string, 
-  temper: DialogTemper = DialogTemper.NEUTRAL
-): void => {
-  let backgroundColor: "bgGreen" | "bgCyan" | "bgYellow" | "bgRed";
-
-  switch (temper) {
-    case DialogTemper.HAPPY:
-      backgroundColor = "bgGreen";
-      break;
-    case DialogTemper.ANNOYED:
-      backgroundColor = "bgYellow";
-      break;
-    case DialogTemper.ANGRY:
-      backgroundColor = "bgRed";
-      break;
-    default:
-      backgroundColor = "bgCyan"
-      break;
-  }
-  const messenger = chalk[backgroundColor].white.bold(` ${characterName} `);
-  console.log("\n", messenger, message, "\n");
-}
+// Async awaitable fs.readRile.
+export const readFile = util.promisify(fs.readFile);
+export const writeFile = util.promisify(fs.writeFile);
